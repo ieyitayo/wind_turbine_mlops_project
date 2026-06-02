@@ -34,10 +34,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Pull data with DVC
-        run: |
-          pip install dvc
-          dvc pull --no-run-cache || echo "DVC remote not configured — using committed data"
+      - name: Generate dataset
+        run: python generate_data.py
 
       - name: Run pytest test suite
         run: pytest tests/ -v --tb=short
@@ -48,7 +46,7 @@ jobs:
   train:
     name: Train Model
     runs-on: ubuntu-latest
-    needs: test   # Depends on test job passing
+    needs: test
 
     steps:
       - name: Checkout repository
@@ -70,28 +68,15 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Pull data with DVC
-        run: |
-          pip install dvc
-          dvc pull --no-run-cache || echo "DVC remote not configured — using committed data"
+      - name: Generate dataset
+        run: python generate_data.py
 
       - name: Train model and verify performance threshold
-        run: |
-          python src/train.py --config configs/train_config.yaml
-        # train.py exits with code 1 if R² < minimum threshold,
-        # which will fail this step and the overall pipeline.
+        run: python src/train.py --config configs/train_config.yaml
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
         with:
           name: mlflow-runs
           path: mlruns/
-          retention-days: 30
-
-      - name: Upload drift report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: reports
-          path: reports/
           retention-days: 30
