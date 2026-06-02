@@ -7,7 +7,7 @@ automated testing with pytest, CI/CD with GitHub Actions, and drift monitoring w
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 wind_turbine_mlops_project/
@@ -153,7 +153,7 @@ See [MONITORING.md] for the full drift analysis.
 
 ---
 
-## 🔄 CI/CD Pipeline
+## CI/CD Pipeline
 
 GitHub Actions runs on every push to `main` and every pull request:
 
