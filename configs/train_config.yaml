@@ -1,0 +1,51 @@
+project:
+  name: wind_turbine_power_prediction
+  description: "Regression model predicting wind turbine power output (kW)"
+  version: "1.0.0"
+
+paths:
+  data: data/wind_turbine_production.csv
+  model_output: models/
+  reports: reports/
+  mlflow_tracking_uri: sqlite:///mlruns/mlflow.db
+
+data:
+  target_column: power_output_kw
+  test_size: 0.2
+  random_state: 42
+  numeric_features:
+    - wind_speed_ms
+    - wind_direction_deg
+    - temperature_c
+    - air_density_kgm3
+    - rotor_speed_rpm
+    - pitch_angle_deg
+    - nacelle_temp_c
+    - turbine_age_years
+    - day_of_year
+  categorical_features:
+    - turbine_id
+    - weather_condition
+    - season
+    - availability_status
+
+model:
+  type: RandomForestRegressor   # Options: RandomForestRegressor, GradientBoostingRegressor, Ridge
+  hyperparameters:
+    n_estimators: 200
+    max_depth: 15
+    min_samples_split: 5
+    min_samples_leaf: 2
+    random_state: 42
+
+evaluation:
+  primary_metric: r2
+  additional_metrics:
+    - rmse
+    - mae
+  minimum_r2_threshold: 0.85
+
+drift:
+  threshold: 0.3          # Fraction of drifted features triggering alert
+  reference_size: 2000    # Rows used as reference distribution
+  production_size: 500    # Rows used as production sample
