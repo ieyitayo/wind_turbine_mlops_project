@@ -1,0 +1,5 @@
+outs:
+- md5: a9b9c7ada705e2078a735e40ce632ec5
+  size: 246547
+  path: wind_turbine_production.csv
+  hash: md5

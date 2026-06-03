@@ -1,6 +1,4 @@
 [core]
     remote = local_remote
-    autostage = true
-
 ['remote "local_remote"']
-    url = /tmp/dvc_remote_wind_turbine
+    url = C:\tmp\dvc_remote_wind_turbine
